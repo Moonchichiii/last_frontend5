@@ -1,93 +1,79 @@
+import React, { useState } from "react";
+import { useAuth } from "../../hooks/UseAuth";
 
-return (
+const RegistrationForm = () => {
+  const { register } = useAuth();
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: ""
+  });
+  const [error, setError] = useState("");
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    if (error) setError("");
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    try {
+      await register(formData.username, formData.email, formData.password);
+      setFormData({
+        username: "",
+        email: "",
+        password: "",
+        confirmPassword: ""
+      });
+    } catch (error) {
+      console.error("Registration error:", error);
+      setError("Registration failed. Please try again.");
+    }
+  };
+
+  return (
     <form onSubmit={handleSubmit}>
-      <div className="mb-3">
-        <label htmlFor="username" className="form-label">
-          Username
-        </label>
-        <input
-          type="text"
-          className="form-control"
-          id="username"
-          name="username"
-          value={userData.username}
-          onChange={handleInputChange}
-          placeholder="Username"
-          required
-          autoComplete="username"
-        />
-        {errors.register?.username &&
-          errors.register.username.map((message, index) => (
-            <Alert key={`username-error-${index}`} variant="danger">
-              {message}
-            </Alert>
-          ))}
-      </div>
-      <div className="mb-3">
-        <label htmlFor="email" className="form-label">
-          Email
-        </label>
-        <input
-          type="email"
-          className="form-control"
-          id="email"
-          name="email"
-          value={userData.email}
-          onChange={handleInputChange}
-          placeholder="Email"
-          required
-        />
-        {errors.register?.email &&
-          errors.register.email.map((message, index) => (
-            <Alert key={`email-error-${index}`} variant="danger">
-              {message}
-            </Alert>
-          ))}
-      </div>
-      <div className="mb-3">
-        <label htmlFor="password" className="form-label">
-          Password
-        </label>
-        <input
-          type="password"
-          className="form-control"
-          id="password"
-          name="password"
-          value={userData.password}
-          onChange={handleInputChange}
-          placeholder="Password"
-          required
-          autoComplete="new-password"
-        />
-      </div>
-      <div className="mb-3">
-        <label htmlFor="confirmPassword" className="form-label">
-          Confirm Password
-        </label>
-        <input
-          type="password"
-          className="form-control"
-          id="confirmPassword"
-          name="confirmPassword"
-          value={userData.confirmPassword}
-          onChange={handleInputChange}
-          placeholder="Confirm Password"
-          required
-          autoComplete="new-password"
-        />
-
-        {errors.confirmPassword &&
-          errors.confirmPassword.map((message, index) => (
-            <Alert key={`confirmPassword-error-${index}`} variant="danger">
-              {message}
-            </Alert>
-          ))}
-      </div>
-
-   
-      <Button variant="primary" type="submit">
-        Register
-      </Button>
+      <input
+        name="username"
+        type="text"
+        value={formData.username}
+        onChange={handleChange}
+        placeholder="Username"
+        required
+      />
+      <input
+        name="email"
+        type="email"
+        value={formData.email}
+        onChange={handleChange}
+        placeholder="Email"
+        required
+      />
+      <input
+        name="password"
+        type="password"
+        value={formData.password}
+        onChange={handleChange}
+        placeholder="Password"
+        required
+      />
+      <input
+        name="confirmPassword"
+        type="password"
+        value={formData.confirmPassword}
+        onChange={handleChange}
+        placeholder="Confirm Password"
+        required
+      />
+      {error && <div style={{ color: "red" }}>{error}</div>}
+      <button type="submit">Register</button>
     </form>
   );
 };

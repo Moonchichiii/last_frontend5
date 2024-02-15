@@ -1,50 +1,32 @@
+import React, { useContext, useState, Suspense } from "react";
+import { Navbar, Container, Nav, Offcanvas } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome } from "@fortawesome/free-solid-svg-icons/faHome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons/faHeart";
-import { faPlusSquare } from "@fortawesome/free-solid-svg-icons/faPlusSquare";
-import { faUserCircle } from "@fortawesome/free-solid-svg-icons/faUserCircle";
-import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons/faSignOutAlt";
-import { faList } from "@fortawesome/free-solid-svg-icons/faList";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-
-
+import {
+  faHome,
+  faHeart,
+  faPlusSquare,
+  faUserCircle,
+  faSignOutAlt,
+  faList,
+  faPlus
+} from "@fortawesome/free-solid-svg-icons";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import { useAuth } from "../hooks/UseAuth";
 
 function Navigation() {
-  const { token, logOut } = useAuth();
-
-  const [showAuthModal, setShowAuthModal] = useState(false);
-
-  const [showCreatePostModal, setShowCreatePostModal] = useState(false);
-
-  const [showProfileManagerModal, setShowProfileManagerModal] = useState(false);
-
-  const [showFollowersModal, setShowFollowersModal] = useState(false);
-
-  const handleShowFollowers = () => setShowFollowersModal(true);
-  const handleCloseFollowers = () => setShowFollowersModal(false);
-
-  // No show OffCanvas
-
+  const currentUser = useContext(CurrentUserContext);
+  const { logout } = useAuth();
   const [showOffCanvas, setShowOffCanvas] = useState(false);
 
-  // Toggle OffCanvas
   const toggleOffCanvas = () => setShowOffCanvas(!showOffCanvas);
   const handleOffCanvasClose = () => setShowOffCanvas(false);
 
-  const handleLogout = () => {
-    handleOffCanvasClose();
-    logOut();
-  };
-
-  // updating the feed
-  const { resetPage } = useContext(PostsContext);
+  const handleShowModal = (modalType) => {};
 
   return (
     <Navbar expand="lg" className="bg-body-tertiary mb-3 sticky-top">
       <Container fluid>
-        <Navbar.Brand className="navbar-brand" href="/">
-          <strong>Recipe Repository</strong>
-        </Navbar.Brand>
+        <Navbar.Brand href="/">Recipe Repository</Navbar.Brand>
         <Navbar.Toggle
           aria-controls="offcanvasNavbar"
           onClick={toggleOffCanvas}
@@ -61,86 +43,49 @@ function Navigation() {
           </Offcanvas.Header>
           <Offcanvas.Body>
             <Nav className="justify-content-end flex-grow-1 pe-3">
-              {!token && (
+              {!currentUser ? (
+                <Nav.Link href="/home">
+                  <FontAwesomeIcon icon={faHome} className="me-1" />
+                  Feed
+                </Nav.Link>
+              ) : (
                 <>
-                  <Nav.Link to="/home">
-                    <FontAwesomeIcon icon={faHome} className="me-1" />
-                    Home
+                  <Nav.Link onClick={() => handleShowModal("follow")}>
+                    <FontAwesomeIcon icon={faPlus} className="me-1" />
+                    Follow
                   </Nav.Link>
-                </>
-              )}
-
-              {token && (
-                <>
-                 <Nav.Link onClick={handleShowFollowers}>
-            <FontAwesomeIcon icon={faPlus} className="me-1" />
-            Follow
-          </Nav.Link>
-
-                  
-
-                  <Nav.Link onClick={() => resetPage()}>
+                  <Nav.Link onClick={() => handleShowModal("feed")}>
                     <FontAwesomeIcon icon={faList} className="me-1" />
                     Feed
                   </Nav.Link>
-                  <Nav.Link to="/liked">
+                  <Nav.Link href="/liked">
                     <FontAwesomeIcon icon={faHeart} className="me-1" />
                     Liked Posts
                   </Nav.Link>
-
-                  <Nav.Link onClick={() => setShowCreatePostModal(true)}>
+                  <Nav.Link onClick={() => handleShowModal("addPost")}>
                     <FontAwesomeIcon icon={faPlusSquare} className="me-1" />
                     Add Post
                   </Nav.Link>
-
-                  <Nav.Link onClick={() => setShowProfileManagerModal(true)}>
+                  <Nav.Link onClick={() => handleShowModal("profile")}>
                     <FontAwesomeIcon icon={faUserCircle} className="me-1" />
                     Profile
-                  </Nav.Link>                  
+                  </Nav.Link>
                 </>
               )}
-            </Nav>
-
-            {token ? (
-              <Nav.Link className="accounts-link" to="/" onClick={handleLogout}>
-                <FontAwesomeIcon icon={faSignOutAlt} /> Sign out
-              </Nav.Link>
-            ) : (
               <Nav.Link
-                onClick={() => setShowAuthModal(true)}
                 className="accounts-link"
+                onClick={currentUser ? logout : () => handleShowModal("auth")}
               >
-                <FontAwesomeIcon icon={faUserCircle} className="me-1" />{" "}
-                Accounts
+                <FontAwesomeIcon
+                  icon={currentUser ? faSignOutAlt : faUserCircle}
+                  className="me-1"
+                />
+                {currentUser ? "Sign out" : "Accounts"}
               </Nav.Link>
-            )}
+            </Nav>
           </Offcanvas.Body>
         </Navbar.Offcanvas>
       </Container>
-
-      <Suspense fallback={<div>Loading...</div>}>
-        {showAuthModal && (
-          <AuthenticationModal
-            show={showAuthModal}
-            handleClose={() => setShowAuthModal(false)}
-          />
-        )}
-        {showCreatePostModal && (
-          <CreatePostModal
-            show={showCreatePostModal}
-            handleClose={() => setShowCreatePostModal(false)}
-          />
-        )}
-                 {showProfileManagerModal && (
-          <ProfileManagerModal
-            show={showProfileManagerModal}
-            handleClose={() => setShowProfileManagerModal(false)}
-          />
-          
-         
-        )}
-        <FollowersModal show={showFollowersModal} handleClose={handleCloseFollowers} />
-      </Suspense>
     </Navbar>
   );
 }
