@@ -4,7 +4,9 @@ import { CurrentUserProvider } from './contexts/CurrentUserContext';
 import { ProfileDataProvider } from './contexts/ProfileDataContext';
 import ProtectedRoute from './pages/routing/ProtectedRoute';
 
-import NavBar from './components/NavBar'
+import Layout from './assets/styles/LayOut.jsx';
+
+// import PostCard from "./components/Card.jsx";
 import LoginForm from './pages/auth/LoginForm';
 import RegistrationForm from './pages/auth/SignUpForm';
 
@@ -14,33 +16,35 @@ import "./App.css";
 const Dashboard = lazy(() => import('./pages/dashboard/DashBoard.jsx'));
 
 function App() {
-  
-  
   return (
-
+    <Suspense fallback={<div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading...</div>}>
       <Routes>
         <Route path="/" element={
-          <>
+          <Layout>
             <div className="container">
-              <NavBar />
+              {/* <PostCard />  */}
               <RegistrationForm />            
-              <LoginForm /> 
+              <LoginForm />
             </div>
-          </>
+          </Layout>
         } />
         <Route
           path="/dashboard/*"
           element={
             <ProtectedRoute>
-                  <CurrentUserProvider>
-              <ProfileDataProvider> 
-                <Dashboard />
-              </ProfileDataProvider>
+              <CurrentUserProvider>
+                <ProfileDataProvider>
+                  <Layout>
+                    <Dashboard />
+                  </Layout>
+                </ProfileDataProvider>
               </CurrentUserProvider>
             </ProtectedRoute>
           }
         />
+        
       </Routes>    
+    </Suspense>
   );
 }
 

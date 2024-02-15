@@ -40,40 +40,78 @@ const RegistrationForm = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <input
-        name="username"
-        type="text"
-        value={formData.username}
-        onChange={handleChange}
-        placeholder="Username"
-        required
-      />
-      <input
-        name="email"
-        type="email"
-        value={formData.email}
-        onChange={handleChange}
-        placeholder="Email"
-        required
-      />
-      <input
-        name="password"
-        type="password"
-        value={formData.password}
-        onChange={handleChange}
-        placeholder="Password"
-        required
-      />
-      <input
-        name="confirmPassword"
-        type="password"
-        value={formData.confirmPassword}
-        onChange={handleChange}
-        placeholder="Confirm Password"
-        required
-      />
-      {error && <div style={{ color: "red" }}>{error}</div>}
-      <button type="submit">Register</button>
+      <div className="mb-3">
+        <label htmlFor="username" className="form-label">
+          Username
+        </label>
+        <input
+          id="username"
+          name="username"
+          type="text"
+          className="form-control"
+          value={formData.username}
+          onChange={handleChange}
+          placeholder="Username"
+          required
+          autoComplete="username"
+        />
+      </div>
+  
+      <div className="mb-3">
+        <label htmlFor="email" className="form-label">
+          Email
+        </label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          className="form-control"
+          value={formData.email}
+          onChange={handleChange}
+          placeholder="Email"
+          required
+          autoComplete="email"
+        />
+      </div>
+  
+      <div className="mb-3">
+        <label htmlFor="password" className="form-label">
+          Password
+        </label>
+        <input
+          id="password"
+          name="password"
+          type="password"
+          className="form-control"
+          value={formData.password}
+          onChange={handleChange}
+          placeholder="Password"
+          required
+          autoComplete="new-password"
+        />
+      </div>
+  
+      <div className="mb-3">
+        <label htmlFor="confirmPassword" className="form-label">
+          Confirm Password
+        </label>
+        <input
+          id="confirmPassword"
+          name="confirmPassword"
+          type="password"
+          className="form-control"
+          value={formData.confirmPassword}
+          onChange={handleChange}
+          placeholder="Confirm Password"
+          required
+        />
+      </div>
+  
+      {error && <div className="alert alert-danger">{error}</div>}
+  
+      <button type="submit" className="btn btn-primary">
+        Register
+      </button>
     </form>
   );
 };
