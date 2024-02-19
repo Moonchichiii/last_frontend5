@@ -1,5 +1,27 @@
 # last_frontend5
 
+## Table of Contents
+
+1. [Project Goals](#project-goals)
+
+2.  [User Stories](#user-stories)
+
+3.  [Planning Mockup & Prebuild](#planning-mockup-prebuild)
+
+4.  [Technologies Used](#technologies-used)
+
+5.  [Dependencies](#dependencies)
+
+6.  [Frontend Structure and Components](#frontend-structure-and-components)
+
+7.  [Testing](#testing)
+
+8.  [Deployment](#deployment)
+
+9.  [Credits & Tutorials](#credits-&-tutorials)
+
+A rethink on the modal component, and the layout in the navbar, so i only use one modal for the entire project instead of complicating it to much, two options in the navbar which decideds which content will be present inside the modal, based on the choice by the user. 
+
 
 So many mistakes were made in the past, but they were all learning opportunities! so this is it! 
 
@@ -101,11 +123,42 @@ web: node server.js
 npm run dev 
 npm run build 
 
+## Planning Mockup & Prebuild
+
+
+Mockups using https://webflow.com
+
+<img src="" alt="mockup" width="320">
+
+
+Prebuild using https://codepen.io 
+
+<img src="" alt="registration" width="320">
 
 
 
+Color palette using https://coolors.co/
+
+<img src="" alt="color palette" width="320">
+
+[Back to top](#table-of-contents)
+
+----------
+
+## Frontend Structure and Components
+
+### Folder Structure
+
+## Testing
 
 
+
+## Technologies Used
+
+## Credits & Tutorials
+
+- Moments Walktrough Project 
+- Components library https://react-bootstrap.github.io/
 
 
 # React + Vite

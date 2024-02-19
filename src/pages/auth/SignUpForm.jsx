@@ -39,8 +39,9 @@ const RegistrationForm = () => {
   };
 
   return (
+    <><h2>Sign up</h2>
     <form onSubmit={handleSubmit}>
-      <div className="mb-3">
+      <div className="mb-3">        
         <label htmlFor="username" className="form-label">
           Username
         </label>
@@ -113,6 +114,7 @@ const RegistrationForm = () => {
         Register
       </button>
     </form>
+    </>
   );
 };
 

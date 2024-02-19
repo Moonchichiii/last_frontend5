@@ -1,41 +1,39 @@
-import { useState } from "react";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
+import React, { Suspense } from 'react';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
+import { useModal } from "../contexts/ModalContext";
 
-function Example() {
-  const [show, setShow] = useState(false);
+// Lazy load the forms
+const LoginForm = React.lazy(() => import("../pages/auth/LoginForm"));
+const SignupForm = React.lazy(() => import("../pages/auth/SignUpForm"));
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+function GenericModal() {
+  const { showModal, modalContent, handleCloseModal } = useModal();
+
+  // modalcontent to render...
+  const renderForm = () => {
+    switch (modalContent) {
+      case 'login':
+        return <LoginForm />;
+      case 'signup':
+        return <SignupForm />;
+      default:
+        return <div>No content selected....</div>; 
+    }
+  };
 
   return (
-    <>
-      <Button variant="primary" onClick={handleShow}>
-        Launch static backdrop modal
-      </Button>
-
-      <Modal
-        show={show}
-        onHide={handleClose}
-        backdrop="static"
-        keyboard={false}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Modal title</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          I will not close if you click outside me. Do not even try to press
-          escape key.
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary">Understood</Button>
-        </Modal.Footer>
-      </Modal>
-    </>
+    <Modal show={showModal} onHide={handleCloseModal} backdrop="static" keyboard={false}>
+      <Modal.Body>
+        <Suspense fallback={<div>Loading...</div>}>
+          {renderForm()}
+        </Suspense>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleCloseModal}>Close</Button>
+      </Modal.Footer>
+    </Modal>
   );
 }
 
-export default Example;
+export default GenericModal;
