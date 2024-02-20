@@ -1,12 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../../hooks/UseAuth";
+import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 
 const ProtectedRoute = ({ children }) => {
-const { token } = useAuth();
+  const currentUser = useContext(CurrentUserContext);
 
-return token ? children : <Navigate to="/" />;
-
+  return currentUser ? children : <Navigate to="/" />;
 };
 
 export default ProtectedRoute;

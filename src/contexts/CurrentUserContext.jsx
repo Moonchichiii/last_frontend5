@@ -1,79 +1,42 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { axiosJson } from "../api/axiosConfig";
-import { useNavigate } from "react-router-dom";
 
+// No changes in the creation of your contexts
 export const CurrentUserContext = createContext(null);
 export const SetCurrentUserContext = createContext(() => {});
-export const useCurrentUser = () => useContext(CurrentUserContext);
-export const useSetCurrentUser = () => useContext(SetCurrentUserContext);
-
-const refreshTokenEndpoint = "/token/refresh/";
-const currentUserEndpoint = "/users/";
 
 export const CurrentUserProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(null);
-  const navigate = useNavigate();
+    const [currentUser, setCurrentUser] = useState(null);
 
-  // Function to refresh the token
-  const refreshToken = async () => {
-    try {
-      const response = await axiosJson.post(refreshTokenEndpoint);
-      axiosJson.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${response.data.accessToken}`;
-      fetchCurrentUser();
-    } catch (error) {
-      navigate("/signin");
-    }
-  };
-
-  // Function to fetch current user data
-  const fetchCurrentUser = async () => {
-    try {
-      const response = await axiosJson.get(currentUserEndpoint);
-      setCurrentUser(response.data);
-    } catch (error) {
-      if (error.response?.status === 401 && currentUser === null) {
-        await refreshToken();
-      } else {
-        console.error("Error fetching current user:", error);
-      }
-    }
-  };
-
-  useEffect(() => {
-    fetchCurrentUser();
-
-    // axios interceptor
-    const interceptor = axiosJson.interceptors.response.use(
-      (response) => response,
-      async (error) => {
-        // unauthorized
-        if (error.response?.status === 401 && !error.config._retry) {
-          error.config._retry = true;
-          try {
-            await refreshToken();
-            return axiosJson(error.config);
-          } catch (refreshError) {
-            navigate("/signin");
-            return Promise.reject(refreshError);
-          }
+    // Function to refresh the authentication token
+    const refreshAuthToken = async () => {
+        try {
+            const response = await axiosJson.post('/users/token/refresh/', {}, { withCredentials: true });
+            if (response.status === 200) {
+                console.log('Token refreshed successfully');
+                setCurrentUser(updatedUserInfo);
+            }
+        } catch (error) {
+            console.error('Token refresh failed:', error);            
+            setCurrentUser(null); 
         }
-        return Promise.reject(error);
-      }
-    );
-
-    // remove interceptor on components unmounts
-    return () => {
-      axiosJson.interceptors.response.eject(interceptor);
     };
-  }, []);
 
-  return (
-    <CurrentUserContext.Provider value={currentUser}>
-      <SetCurrentUserContext.Provider value={setCurrentUser}>
-        {children}
-      </SetCurrentUserContext.Provider>
-    </CurrentUserContext.Provider>
-  );
+    // Effect to set up a periodic token refresh
+    useEffect(() => {
+        const intervalId = setInterval(refreshAuthToken, 1000 * 60 * 15); 
+        return () => clearInterval(intervalId);
+    }, []);
+
+    return (
+        <CurrentUserContext.Provider value={currentUser}>
+            <SetCurrentUserContext.Provider value={setCurrentUser}>
+                {children}
+            </SetCurrentUserContext.Provider>
+        </CurrentUserContext.Provider>
+    );
 };
+
+
+export const useCurrentUser = () => useContext(CurrentUserContext);
+export const useSetCurrentUser = () => useContext(SetCurrentUserContext);

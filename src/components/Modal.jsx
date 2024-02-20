@@ -28,9 +28,9 @@ function GenericModal() {
         <Suspense fallback={<div>Loading...</div>}>
           {renderForm()}
         </Suspense>
-      </Modal.Body>
+              </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleCloseModal}>Close</Button>
+      <Button variant="secondary" onClick={handleCloseModal}>Close</Button>
       </Modal.Footer>
     </Modal>
   );
