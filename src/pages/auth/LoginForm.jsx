@@ -20,7 +20,7 @@ const LoginForm = () => {
     } catch (error) {
       const errorMessage =
         error.response?.data?.error ||
-        "Login failed due to an unexpected error.";
+        "Double Check username or password.";
       setErrors({ ...errors, login: errorMessage });
     }
   };
@@ -30,10 +30,11 @@ const LoginForm = () => {
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
-          <label htmlFor="username" className="form-label">
+          <label htmlFor="usernameLogin" className="form-label">
             Username
           </label>
           <input
+            id="usernameLogin"
             name="username"
             type="text"
             className="form-control"
@@ -46,10 +47,11 @@ const LoginForm = () => {
         </div>
 
         <div className="mb-3">
-          <label htmlFor="password" className="form-label">
+          <label htmlFor="passwordLogin" className="form-label">
             Password
           </label>
           <input
+            id="passwordLogin"
             name="password"
             type="password"
             className="form-control"

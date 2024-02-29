@@ -160,8 +160,10 @@ Color palette using https://coolors.co/
 - Moments Walktrough Project 
 - Components library https://react-bootstrap.github.io/
 
+- https://medium.com/@amavictor/storing-tokens-in-cookies-with-react-93a5a818c3a8 - good article about js-cookie!!!! 
 
 # React + Vite
+
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 

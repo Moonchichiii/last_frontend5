@@ -3,9 +3,18 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import { useModal } from "../contexts/ModalContext";
 
-// Lazy load the forms
+// Lazy loading the forms 
+// auth forms
 const LoginForm = React.lazy(() => import("../pages/auth/LoginForm"));
 const SignupForm = React.lazy(() => import("../pages/auth/SignUpForm"));
+//  posts forms 
+const PostForm = React.lazy(() => import("../pages/posts/PostForm.jsx"));
+// const PostEdit = React.lazy(() => import("../pages/posts/PostEdit")); 
+
+// Profile Forms 
+// const ProfileEditForm = React.lazy(() => import("./profiles/ProfileEdit"));
+
+
 
 function GenericModal() {
   const { showModal, modalContent, handleCloseModal } = useModal();
@@ -17,6 +26,12 @@ function GenericModal() {
         return <LoginForm />;
       case 'signup':
         return <SignupForm />;
+        case 'addPost':
+          return <PostForm />;
+          // case 'editPost':
+          // return <PostEdit />;
+        // case 'editProfile':
+          // return <ProfileEditForm />;
       default:
         return <div>No content selected....</div>; 
     }

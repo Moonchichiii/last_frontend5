@@ -6,16 +6,16 @@ const axiosBase = axios.create({
   withCredentials: true,
 });
 
-// Authentication requests. 
+// Authentication requests.
 export const axiosJson = axios.create({
   ...axiosBase.defaults,
   headers: { "Content-Type": "application/json" },
 });
 
-// Multipart/form-data posts & profile,  
+// Multipart/form-data posts & profile,
 export const axiosFormData = axios.create({
   ...axiosBase.defaults,
   headers: { "Content-Type": "multipart/form-data" },
-});
+  });
 
 
