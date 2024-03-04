@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { CurrentUserProvider } from "./contexts/CurrentUserContext";
+import { ProfileDataProvider } from './contexts/ProfileDataContext.jsx';
 
 import App from './App.jsx';
 import './index.css';
@@ -9,14 +10,14 @@ import './index.css';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    
-    <BrowserRouter>
+  <BrowserRouter>
     <CurrentUserProvider>
-      <App />
-      </CurrentUserProvider>
-    </BrowserRouter>
-    
-  </React.StrictMode>
+      <ProfileDataProvider>
+        <App />
+      </ProfileDataProvider>
+    </CurrentUserProvider>
+  </BrowserRouter>
+</React.StrictMode>
 );
 
 

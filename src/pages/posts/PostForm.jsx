@@ -3,10 +3,11 @@ import Cookies from "js-cookie";
 import { Button, Form, Alert } from "react-bootstrap";
 import { axiosFormData } from "../../api/axiosConfig";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
+import { useModal } from "../../contexts/ModalContext";
 
 const PostForm = () => {
   const currentUser = useContext(CurrentUserContext);
-  console.log("Current user:", currentUser);
+  const { handleCloseModal } = useModal(); 
 
   const [postData, setPostData] = useState({
     title: "",
@@ -67,6 +68,7 @@ const PostForm = () => {
           Authorization: `Bearer ${accessToken}`
         }
       });
+      handleCloseModal();
     } catch (error) {
       setError("Something went wrong during the post!");
     }

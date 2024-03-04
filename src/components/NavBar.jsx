@@ -6,9 +6,10 @@ import {
   faHeart,
   faPlusSquare,
   faUserCircle,
+  faUserPlus,
   faSignOutAlt,
   faList,
-  faPlus
+  faPlus  
 } from "@fortawesome/free-solid-svg-icons";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import { useAuth } from "../hooks/UseAuth";
@@ -21,7 +22,9 @@ function Navigation() {
   const currentUser = useContext(CurrentUserContext);
   const { logout } = useAuth();
   const [showOffCanvas, setShowOffCanvas] = useState(false);
-  
+
+    
+
   // Modal 
 
   const { handleShowModal } = useModal();
@@ -56,13 +59,15 @@ function Navigation() {
                     <FontAwesomeIcon icon={faHome} className="me-1" />
                     Feed
                   </Nav.Link>
+                  
                   <Nav.Link onClick={() => handleShowModal('login')}>
                     
                     <FontAwesomeIcon icon={faUserCircle} className="me-1" />
                     Login
                   </Nav.Link>
                   <Nav.Link onClick={() => handleShowModal('signup')}>
-                    Sign Up
+                  <FontAwesomeIcon icon={faUserPlus} className="me-1"/>
+                  Sign Up
                   </Nav.Link>
                 </>
               ) : (
@@ -82,7 +87,7 @@ function Navigation() {
                   <Nav.Link onClick={() => handleShowModal('addPost')}>
                     <FontAwesomeIcon icon={faPlusSquare} className="me-1" />
                     Add Post
-                  </Nav.Link>
+                  </Nav.Link>        
                   <Nav.Link onClick={() => handleShowModal('profile')}>
                     <FontAwesomeIcon icon={faUserCircle} className="me-1" />
                     Profile
