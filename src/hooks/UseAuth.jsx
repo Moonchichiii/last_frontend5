@@ -1,6 +1,6 @@
 import { axiosJson } from "../api/axiosConfig";
 import Cookies from 'js-cookie'; 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useEffect } from "react-router-dom";
 import { useSetCurrentUser } from "../contexts/CurrentUserContext";
 
 export function useAuth() {
@@ -42,7 +42,7 @@ export function useAuth() {
   }, [currentUser, navigate]);
 
 
-  
+
   // Login an existing user
   async function login(username, password) {
     try {
