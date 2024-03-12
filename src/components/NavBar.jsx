@@ -55,10 +55,6 @@ function Navigation() {
             <Nav className="justify-content-end flex-grow-1 pe-3">
               {!currentUser ? (
                 <>
-                  <Nav.Link href="#">
-                    <FontAwesomeIcon icon={faHome} className="me-1" />
-                    Feed
-                  </Nav.Link>
                   
                   <Nav.Link onClick={() => handleShowModal('login')}>
                     
