@@ -9,11 +9,9 @@ export function useAuth() {
   const navigate = useNavigate();
 
   const setCookies = (accessToken, refreshToken) => {
-    Cookies.set("access", accessToken, { path: "/", sameSite: "lax" });
-    Cookies.set("refresh", refreshToken, {
-      path: "/token/refresh/",
-      sameSite: "lax"
-    });
+    const secure = window.location.protocol.includes("https");
+    Cookies.set("access", accessToken, { path: "/", sameSite: "None", secure });
+    Cookies.set("refresh", refreshToken, { path: "/token/refresh/", sameSite: "None", secure });
   };
 
   // Register a new user
