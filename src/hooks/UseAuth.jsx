@@ -10,13 +10,10 @@ export function useAuth() {
 
   const setCookies = (accessToken, refreshToken) => {
     const secure = window.location.protocol.includes("https");
-    Cookies.set("access", accessToken, { path: "/", sameSite: "Lax", secure });
-    Cookies.set("refresh", refreshToken, {
-      path: "/token/refresh/",
-      sameSite: "Lax",
-      secure
-    });
-  };
+
+Cookies.set("access", accessToken, { path: "/", sameSite: "None", secure });
+Cookies.set("refresh", refreshToken, { path: "/token/refresh/", sameSite: "None", secure });
+  }
 
   // Register a new user
   async function register(username, email, password) {
