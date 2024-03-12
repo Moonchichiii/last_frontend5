@@ -25,18 +25,7 @@ export function useAuth() {
         
         if (access && refresh) {
           setCookies(access, refresh);
-   
-          setCurrentUser({ isLoggedIn: true }, () => {
-            setCookies(access, refresh).then(() => {
-          
-            });
-            useEffect(() => {
-              if (currentUser?.isLoggedIn) {
-                navigate("/dashboard");
-              }
-            }, [currentUser, navigate]);
-          });
-          
+          setCurrentUser({ isLoggedIn: true });
         } else {
           console.error("Registration successful, but no tokens received.");
         }
@@ -46,7 +35,14 @@ export function useAuth() {
     }
   }
 
+  useEffect(() => {
+    if (currentUser?.isLoggedIn) {
+      navigate("/dashboard");
+    }
+  }, [currentUser, navigate]);
 
+
+  
   // Login an existing user
   async function login(username, password) {
     try {

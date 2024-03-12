@@ -8,7 +8,7 @@ export const SetCurrentUserContext = createContext(() => {});
 
 
 const useCurrentUserProvider = () => {
-  // Initial state adjustment to include userId
+  
   const [currentUser, setCurrentUser] = useState({
     isLoggedIn: false,
     userId: null, 
