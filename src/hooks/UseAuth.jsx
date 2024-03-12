@@ -1,6 +1,7 @@
+import React, { useEffect } from 'react';
 import { axiosJson } from "../api/axiosConfig";
 import Cookies from 'js-cookie'; 
-import { useNavigate, useEffect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSetCurrentUser } from "../contexts/CurrentUserContext";
 
 export function useAuth() {
