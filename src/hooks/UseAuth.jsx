@@ -8,13 +8,12 @@ export function useAuth() {
   const setCurrentUser = useSetCurrentUser();
   const navigate = useNavigate();
 
-  const setCookies = (accessToken, refreshToken) => {
+  const setCookies = (accessToken, refreshToken) => {    
     const secure = window.location.protocol.includes("https");
-
-Cookies.set("access", accessToken, { path: "/", sameSite: "None", secure });
-Cookies.set("refresh", refreshToken, { path: "/token/refresh/", sameSite: "None", secure });
-  }
-
+    Cookies.set("access", accessToken, { path: "/", sameSite: "None", secure: secure });
+    Cookies.set("refresh", refreshToken, { path: "/token/refresh/", sameSite: "None", secure: secure });
+  };
+  
   // Register a new user
   async function register(username, email, password) {
     try {
