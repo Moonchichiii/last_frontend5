@@ -1,13 +1,12 @@
+import React, { useEffect } from 'react';
 import { axiosJson } from "../api/axiosConfig";
-import Cookies from 'js-cookie';
+import Cookies from 'js-cookie'; 
 import { useNavigate } from "react-router-dom";
 import { useSetCurrentUser } from "../contexts/CurrentUserContext";
-
 
 export function useAuth() {
   const setCurrentUser = useSetCurrentUser();
   const navigate = useNavigate();
-
 
   const setCookies = (accessToken, refreshToken) => {
     Cookies.set("access", accessToken, { path: "/", sameSite: "lax" });
@@ -17,29 +16,24 @@ export function useAuth() {
     });
   };
 
-
   // Register a new user
   async function register(username, email, password) {
     try {
       const response = await axiosJson.post("/users/register/", { username, email, password });
- 
+  
       if (response.status === 200 || response.status === 201) {
         const { access, refresh } = response.data;
-       
+        
         if (access && refresh) {
           setCookies(access, refresh);
-   
-          setCurrentUser({ isLoggedIn: true }, () => {
-            setCookies(access, refresh).then(() => {
-         
-            });
-            useEffect(() => {
-              if (currentUser?.isLoggedIn) {
-                navigate("/dashboard");
-              }
-            }, [currentUser, navigate]);
-          });
-         
+          setCurrentUser({ isLoggedIn: true });
+          
+          useEffect(() => {
+            if (currentUser?.isLoggedIn) {
+              navigate("/dashboard");
+            }
+          }, [currentUser, navigate]);
+        
         } else {
           console.error("Registration successful, but no tokens received.");
         }
@@ -59,7 +53,7 @@ export function useAuth() {
       if (response.status === 200) {
         const { access, refresh, user_id } = response.data; 
         setCookies(access, refresh);
-
+        
         setCurrentUser({ isLoggedIn: true, userId: user_id }); 
         navigate("/dashboard");
       }
@@ -68,12 +62,12 @@ export function useAuth() {
       
     }
   }
-  
+  // Logout current user, backend will revoke the refresh token
+
   const removeCookies = () => {
     Cookies.remove("access", { path: "/" });
     Cookies.remove("refresh", { path: "/token/refresh/" });
   };
-
 
   async function logout() {
     try {
@@ -87,7 +81,6 @@ export function useAuth() {
       console.error("Logout failed:", error.response || error.message);
     }
   }
-
 
   return { register, login, logout };
 }
