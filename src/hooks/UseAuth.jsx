@@ -73,9 +73,11 @@ export function useAuth() {
   // Logout current user, backend will revoke the refresh token
 
   const removeCookies = () => {
-    Cookies.remove("access", { path: "/" });
-    Cookies.remove("refresh", { path: "/token/refresh/" });
+    const secure = window.location.protocol.includes("https");
+    Cookies.remove("access", { path: "/", sameSite: "None", secure: secure });
+    Cookies.remove("refresh", { path: "/token/refresh/", sameSite: "None", secure: secure });
   };
+  
 
   async function logout() {
     try {
