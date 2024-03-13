@@ -77,6 +77,9 @@ export function useAuth() {
     Cookies.remove("access", { path: "/", sameSite: "None", secure: secure });
     Cookies.remove("refresh", { path: "/token/refresh/", sameSite: "None", secure: secure });
   };
+
+  
+
   
 
   async function logout() {
