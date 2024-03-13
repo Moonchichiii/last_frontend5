@@ -33,19 +33,13 @@ export function useAuth() {
 
       if (response.status === 200 || response.status === 201) {
         const { access, refresh } = response.data;
-
         if (access && refresh) {
           setCookies(access, refresh);
           setCurrentUser({ isLoggedIn: true });
-
-          useEffect(() => {
-            if (currentUser?.isLoggedIn) {
-              navigate("/dashboard");
-            }
-          }, [currentUser, navigate]);
+          navigate("/dashboard");
         } else {
           console.error("Registration successful, but no tokens received.");
-        }
+        }      
       }
     } catch (error) {
       console.error("Registration failed:", error.response || error.message);
