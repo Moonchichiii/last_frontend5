@@ -10,7 +10,7 @@ export function useAuth() {
 
   const setCookies = (accessToken, refreshToken) => {
     const secure = window.location.protocol.includes("https");
-    Cookies.set("my-access", accessToken, {
+    Cookies.set("access", accessToken, {
       path: "/",
       sameSite: "None",
       secure: secure
@@ -73,7 +73,7 @@ export function useAuth() {
   // Logout current user, backend will revoke the refresh token
 
   const removeCookies = () => {
-    Cookies.remove("my-access", { path: "/" });
+    Cookies.remove("access", { path: "/" });
     Cookies.remove("refresh", { path: "/token/refresh/" });
   };
 
