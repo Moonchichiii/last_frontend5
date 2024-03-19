@@ -9,7 +9,7 @@ const LoginForm = React.lazy(() => import("../pages/auth/LoginForm"));
 const SignupForm = React.lazy(() => import("../pages/auth/SignUpForm"));
 //  posts forms 
 const PostForm = React.lazy(() => import("../pages/posts/PostForm.jsx"));
-// const PostEdit = React.lazy(() => import("../pages/posts/PostEdit")); 
+const PostEdit = React.lazy(() => import("../pages/posts/PostEdit")); 
 
 // Profile Forms 
 // const ProfileEditForm = React.lazy(() => import("./profiles/ProfileEdit"));
@@ -28,8 +28,8 @@ function GenericModal() {
         return <SignupForm />;
         case 'addPost':
           return <PostForm />;
-          // case 'editPost':
-          // return <PostEdit />;
+           case 'editPost':
+           return <PostEdit />;
         // case 'editProfile':
           // return <ProfileEditForm />;
       default:

@@ -62,7 +62,7 @@ const PostForm = () => {
       formData.append(key, value);
     });
     try {
-      const accessToken = Cookies.get("access");
+      const accessToken = Cookies.get("jwt_access");
       const response = await axiosFormData.post("/posts/", formData, {
         headers: {
           Authorization: `Bearer ${accessToken}`
@@ -83,7 +83,7 @@ const PostForm = () => {
             <img
               src={imagePreview}
               alt="Preview"
-              style={{ width: "100%", marginBottom: "10px" }}
+              style={{ width: "50%", marginBottom: "10px", alignContent: "center" }}
             />
           </div>
         )}

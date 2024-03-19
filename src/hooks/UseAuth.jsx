@@ -10,36 +10,24 @@ export function useAuth() {
 
   const setCookies = (accessToken, refreshToken) => {
     const secure = window.location.protocol.includes("https");
-    Cookies.set("access", accessToken, {
+    Cookies.set("jwt_access", accessToken, {
       path: "/",
-      sameSite: "None",
-      secure: secure
+      sameSite: "Lax",
+      secure: secure,
     });
-    Cookies.set("refresh", refreshToken, {
+    Cookies.set("jwt_refresh", refreshToken, {
       path: "/token/refresh/",
-      sameSite: "None",
-      secure: secure
+      sameSite: "Lax",
+      secure: secure,
     });
   };
 
   // Register a new user
   async function register(username, email, password) {
     try {
-      const response = await axiosJson.post("/users/register/", {
-        username,
-        email,
-        password
-      });
-
-      if (response.status === 200 || response.status === 201) {
-        const { access, refresh } = response.data;
-        if (access && refresh) {
-          setCookies(access, refresh);
-          setCurrentUser({ isLoggedIn: true });
-          navigate("/dashboard");
-        } else {
-          console.error("Registration successful, but no tokens received.");
-        }      
+      const response = await axiosJson.post("/users/register/", { username, email, password });
+      if (response.status === 201) {
+        login(username, password); 
       }
     } catch (error) {
       console.error("Registration failed:", error.response || error.message);
@@ -68,8 +56,8 @@ export function useAuth() {
 
   const removeCookies = () => {
     const secure = window.location.protocol.includes("https");
-    Cookies.remove("access", { path: "/", sameSite: "None", secure: secure });
-    Cookies.remove("refresh", { path: "/token/refresh/", sameSite: "None", secure: secure });
+    Cookies.remove("jwt_access", { path: "/", sameSite: "Lax", secure: secure });
+    Cookies.remove("jwt_refresh", { path: "/token/refresh/", sameSite: "Lax", secure: secure });
   };
 
   

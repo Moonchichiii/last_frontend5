@@ -69,7 +69,7 @@ const useCurrentUserProvider = () => {
     const requestInterceptor = axiosJson.interceptors.request.use((config) => {
       
       if (!config.url.includes("/users/register/") && !config.url.includes("/users/login/")) {
-        const accessToken = Cookies.get('access');
+        const accessToken = Cookies.get('jwt_access');
         if (accessToken) {
           config.headers['Authorization'] = `Bearer ${accessToken}`;
         }

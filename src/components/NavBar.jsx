@@ -16,14 +16,25 @@ import { useAuth } from "../hooks/UseAuth";
 
 import { useModal } from "../contexts/ModalContext";
 
+import useFetchPosts from "../hooks/FetchPosts"
+
 
 function Navigation() {
   // fetching the user status for altering the state of the navbar 
   const currentUser = useContext(CurrentUserContext);
   const { logout } = useAuth();
   const [showOffCanvas, setShowOffCanvas] = useState(false);
-
-    
+  
+  // update posts feed 
+  const { fetchPosts } = useFetchPosts()
+  
+  const handleShowFeed = async () => {
+    await fetchPosts();
+    console.log("feed updated");
+    console.log(fetchPosts);
+    handleOffCanvasClose(); 
+  };
+  
 
   // Modal 
 
@@ -72,7 +83,7 @@ function Navigation() {
                     <FontAwesomeIcon icon={faPlus} className="me-1" />
                     Follow
                   </Nav.Link>
-                  <Nav.Link onClick={() => handleShowModal('feed')}>
+                  <Nav.Link onClick={handleShowFeed}>
                     <FontAwesomeIcon icon={faList} className="me-1" />
                     Feed
                   </Nav.Link>

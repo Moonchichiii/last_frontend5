@@ -1,5 +1,5 @@
 #root > main {
-  max-width: 1280px; 
+  max-width: 1280px;
   margin: 0 auto; 
   padding: 2rem; 
   text-align: left; 
@@ -14,8 +14,7 @@
 body {
   margin: 0;
   display: flex;
-  place-items: center;
-  min-width: 90%;
+  place-items: center;  
   min-height: 100vh;
 }
 
@@ -28,6 +27,13 @@ body {
   gap: 1rem;
 }
 
+@media (min-width: 1024px) {
+  .container {
+    max-width: 80%; 
+    margin: auto; 
+    padding: 2rem; 
+  }
+}
 
 @media (max-width: 768px) {
   #root {

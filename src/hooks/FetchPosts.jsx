@@ -19,7 +19,6 @@ function useFetchPosts() {
             setLoading(false);
         }
     };
-
     // updating the like count, 
     const updateLikesCount = useCallback((postId, increment) => {
         setPosts(currentPosts => 
@@ -37,4 +36,3 @@ function useFetchPosts() {
 }
 
 export default useFetchPosts;
-

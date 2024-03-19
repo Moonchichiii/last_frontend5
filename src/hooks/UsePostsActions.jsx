@@ -9,7 +9,11 @@ const usePostActions = (updateLikesCount) => {
     const deletePost = useCallback(async (postId) => {
         setLoading(true);
         try {
-            await axiosJson.delete(`/posts/${postId}`);
+            await axiosJson.delete(`/posts/${postId}`, {
+                headers: {
+                    'Authorization': `Bearer ${Cookies.get('jwt_access')}`
+                }
+            });
             setLoading(false);
         } catch (err) {
             setError(err.message || 'Unexpected error occurred');
