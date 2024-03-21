@@ -26,63 +26,63 @@ function App() {
   const { posts, loading, error, hasMore } = useFetchPosts(searchTerm, page);
 
   const handleSearch = (term) => {
-      setSearchTerm(term);
-      setPage(1); 
+    setSearchTerm(term);
+    setPage(1);
   };
-  
+
   return (
-      
-      <ModalProvider>
-        <Suspense
-          fallback={
-            <div
-              style={{
-                height: "100vh",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center"
-              }}
-            >
-              Loading...
-            </div>
-          }
-        >
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <Layout>
-                  <div className="container">
+
+    <ModalProvider>
+      <Suspense
+        fallback={
+          <div
+            style={{
+              height: "100vh",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center"
+            }}
+          >
+            Loading...
+          </div>
+        }
+      >
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Layout>
+                <div className="container">
                   <SearchBar onSearch={handleSearch} />
-                  <Suspense fallback={<div>Loading...</div>}>                  
-                  <InfiniteScroll
-                  dataLength={posts.length}
-                  next={() => setPage(page + 1)}
-                  hasMore={hasMore}
-                  loader={<h4>Loading...</h4>}
-                >
-                    <PostCard posts={posts} />
-                </InfiniteScroll>
-                {loading && <div>Loading posts...</div>}
-                {error && <div>Error: {error.message}</div>}
-                    </Suspense>
-                  </div>
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <InfiniteScroll
+                      dataLength={posts.length}
+                      next={() => setPage(page + 1)}
+                      hasMore={hasMore}
+                      loader={<h4>Loading...</h4>}
+                    >
+                      <PostCard posts={posts} />
+                                          </InfiniteScroll>
+                    {loading && <div>Loading posts...</div>}
+                    {error && <div>Error: {error.message}</div>}
+                  </Suspense>
+                </div>
+              </Layout>
+            }
+          />
+          <Route
+            path="/dashboard/*"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <Dashboard />
                 </Layout>
-              }
-            />
-            <Route
-              path="/dashboard/*"
-              element={
-                <ProtectedRoute>
-                    <Layout>
-                      <Dashboard />
-                    </Layout>
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
-        </Suspense>
-      </ModalProvider>
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </Suspense>
+    </ModalProvider>
   );
 }
 

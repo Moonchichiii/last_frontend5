@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+ import React, { createContext, useContext, useState, useEffect } from "react";
 import { axiosJson, axiosFormData } from "../api/axiosConfig";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
@@ -11,7 +11,7 @@ export const useSetProfileData = () => useContext(SetProfileDataContext);
 export const ProfileDataProvider = ({ children }) => {
   const currentUser = useContext(CurrentUserContext);
   const [profileData, setProfileData] = useState({
-    profiles: [], 
+    profiles: [],
     currentUserProfile: null,
   });
 
@@ -20,7 +20,7 @@ export const ProfileDataProvider = ({ children }) => {
     const fetchProfiles = async () => {
       try {
         const response = await axiosFormData.get("/api/profiles/");
-        setProfileData(prevState => ({
+        setProfileData((prevState) => ({
           ...prevState,
           profiles: response.data,
         }));
@@ -31,10 +31,10 @@ export const ProfileDataProvider = ({ children }) => {
 
     // Fetching the current user's profile
     const fetchCurrentUserProfile = async () => {
-      if (currentUser?.isLoggedIn) { 
+      if (currentUser?.isLoggedIn) {
         try {
           const response = await axiosJson.get("/current-profile/");
-          setProfileData(prevState => ({
+          setProfileData((prevState) => ({
             ...prevState,
             currentUserProfile: response.data,
           }));
@@ -47,6 +47,10 @@ export const ProfileDataProvider = ({ children }) => {
     fetchProfiles();
     fetchCurrentUserProfile();
   }, [currentUser]);
+
+  useEffect(() => {
+    console.log("Current UserProfile:", profileData.currentUserProfile);
+  }, [profileData]);
 
   return (
     <ProfileDataContext.Provider value={profileData}>

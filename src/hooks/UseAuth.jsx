@@ -2,11 +2,17 @@ import React, { useEffect } from "react";
 import { axiosJson } from "../api/axiosConfig";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
+// import { CurrentUserContext, useSetCurrentUser } from "../contexts/CurrentUserContext";
+
 import { useSetCurrentUser } from "../contexts/CurrentUserContext";
 
+
 export function useAuth() {
-  const setCurrentUser = useSetCurrentUser();
+  const setCurrentUser = useSetCurrentUser();  
+  
   const navigate = useNavigate();
+
+
 
   const setCookies = (accessToken, refreshToken) => {
     const secure = window.location.protocol.includes("https");
@@ -26,8 +32,9 @@ export function useAuth() {
   async function register(username, email, password) {
     try {
       const response = await axiosJson.post("/users/register/", { username, email, password });
-      if (response.status === 201) {
+      if (response.status === 201) {        
         login(username, password); 
+        setCurrentUser({ isLoggedIn: true, userId: user_id });   
       }
     } catch (error) {
       console.error("Registration failed:", error.response || error.message);
@@ -37,21 +44,18 @@ export function useAuth() {
   // Login an existing user
   async function login(username, password) {
     try {
-      const response = await axiosJson.post("/users/login/", {
-        username,
-        password
-      });
+      const response = await axiosJson.post("/users/login/", { username, password });
       if (response.status === 200) {
         const { access, refresh, user_id } = response.data;
         setCookies(access, refresh);
-
-        setCurrentUser({ isLoggedIn: true, userId: user_id });
+        setCurrentUser({ isLoggedIn: true, userId: user_id });      
         navigate("/dashboard");
       }
     } catch (error) {
       console.error("Login failed:", error);
     }
   }
+
   // Logout current user, backend will revoke the refresh token
 
   const removeCookies = () => {

@@ -12,9 +12,9 @@ root.render(
   <React.StrictMode>
   <BrowserRouter>
     <CurrentUserProvider>
-      <ProfileDataProvider>
+      <ProfileDataProvider>        
         <App />
-      </ProfileDataProvider>
+              </ProfileDataProvider>
     </CurrentUserProvider>
   </BrowserRouter>
 </React.StrictMode>

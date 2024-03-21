@@ -10,99 +10,114 @@ export const SetCurrentUserContext = createContext(() => {});
 const useCurrentUserProvider = () => {
   
   const [currentUser, setCurrentUser] = useState({
-    isLoggedIn: false,
-    userId: null, 
+  isLoggedIn: false,
+  userId: null, 
   });
+
+  
 
   // Function to refresh the authentication token
   const refreshAuthToken = async () => {
-    try {
-      const response = await axiosJson.post("/users/token/refresh/");
-      if (response.status === 200) {
-        
-        setCurrentUser({ 
-          isLoggedIn: true, 
-          userId: response.data.userId 
-        });
-      }
-    } catch (error) {
-      setCurrentUser({ isLoggedIn: false, userId: null });
-      throw error;
+  try {
+    const response = await axiosJson.post("/users/token/refresh/");
+    if (response.status === 200) {
+    setCurrentUser({
+      isLoggedIn: true,
+      userId: response.data.userId
+    });
     }
+  } catch (error) {
+    setCurrentUser({ isLoggedIn: false, userId: null });
+    throw error;
+  }
   };
 
-
-  // interceptor for refresh token
+  // Interceptor for refresh token
   const ResponseInterceptor = () => {
-    return axiosJson.interceptors.response.use(
-      (response) => response,
-      async (error) => {
-        if (error.config.url === "/users/logout/") {
-          return Promise.reject(error);
-        }
-
-        if (error.response?.status === 401 && error.config.url !== "/users/token/refresh/") {
-          try {
-            const response = await refreshAuthToken();
-            setCurrentUser(response.data);
-            return axiosJson(error.config);
-          } catch (refreshError) {
-            setCurrentUser(null);
-            throw refreshError;
-          }
-        }
-        return Promise.reject(error);
+  return axiosJson.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+    if (error.config.url === "/users/logout/") {
+      return Promise.reject(error);
+    }
+  
+    if (error.response?.status === 401 && error.config.url !== "/users/token/refresh/") {
+      try {
+      const response = await refreshAuthToken();
+      setCurrentUser({
+        isLoggedIn: true,
+        userId: response.data.userId
+      });
+      return axiosJson(error.config);
+      } catch (refreshError) {
+      setCurrentUser(null);
+      throw refreshError;
       }
-    );
+    }
+    return Promise.reject(error);
+    }
+  );
   };
 
   useEffect(() => {
-    const interceptorId = ResponseInterceptor();
-    return () => {
-      axiosJson.interceptors.response.eject(interceptorId);
-      setCurrentUser(null);
-    };
+  const interceptorId = ResponseInterceptor();
+  return () => {
+    axiosJson.interceptors.response.eject(interceptorId);
+    setCurrentUser(null);
+  };
   }, []);
+
+
+  
 
   // Intercept requests and conditionally add access token to headers
   useEffect(() => {
-    const requestInterceptor = axiosJson.interceptors.request.use((config) => {
-      
-      if (!config.url.includes("/users/register/") && !config.url.includes("/users/login/")) {
-        const accessToken = Cookies.get('jwt_access');
-        if (accessToken) {
-          config.headers['Authorization'] = `Bearer ${accessToken}`;
-        }
-      }
-      return config;
-    });
+  const requestInterceptor = axiosJson.interceptors.request.use((config) => {
+    if (!config.url.includes("/users/register/") && !config.url.includes("/users/login/")) {
+    const accessToken = Cookies.get('jwt_access');
+    if (accessToken) {
+      config.headers['Authorization'] = `Bearer ${accessToken}`;
+    }
+    }
+    return config;
+  });
 
-    return () => {
-      axiosJson.interceptors.request.eject(requestInterceptor);
-    };
+  return () => {
+    axiosJson.interceptors.request.eject(requestInterceptor);
+  };
   }, []);
 
   // Memorize context value
-  const contextValue = useMemo(() => ({ currentUser, setCurrentUser }), [currentUser]);
+  const contextValue = useMemo(() => {
+  return { currentUser, setCurrentUser };
+  }, [currentUser]);
 
   return contextValue;
 };
+
+
+
+
+
+
 
 export const CurrentUserProvider = ({ children }) => {
   const { currentUser, setCurrentUser } = useCurrentUserProvider();
 
   return (
-    <CurrentUserContext.Provider value={currentUser}>
-      <SetCurrentUserContext.Provider value={setCurrentUser}>
-        {children}
-      </SetCurrentUserContext.Provider>
-    </CurrentUserContext.Provider>
+  <CurrentUserContext.Provider value={currentUser}>
+    <SetCurrentUserContext.Provider value={setCurrentUser}>
+    {children}
+    </SetCurrentUserContext.Provider>
+  </CurrentUserContext.Provider>
   );
 };
 
 // Hooks for current context  
-export const useCurrentUser = () => useContext(CurrentUserContext);
-export const useSetCurrentUser = () => useContext(SetCurrentUserContext);
+export const useCurrentUser = () => {
+  return useContext(CurrentUserContext);
+};
 
-
-
+export const useSetCurrentUser = () => {
+  return useContext(SetCurrentUserContext);
+};

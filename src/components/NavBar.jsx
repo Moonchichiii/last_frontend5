@@ -9,38 +9,33 @@ import {
   faUserPlus,
   faSignOutAlt,
   faList,
-  faPlus  
+  faPlus
 } from "@fortawesome/free-solid-svg-icons";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import { useAuth } from "../hooks/UseAuth";
 
 import { useModal } from "../contexts/ModalContext";
 
-import useFetchPosts from "../hooks/FetchPosts"
-
+import useFetchPosts from "../hooks/FetchPosts";
 
 function Navigation() {
-  // fetching the user status for altering the state of the navbar 
+  // fetching the user status for altering the state of the navbar
   const currentUser = useContext(CurrentUserContext);
   const { logout } = useAuth();
   const [showOffCanvas, setShowOffCanvas] = useState(false);
-  
-  // update posts feed 
-  const { fetchPosts } = useFetchPosts()
-  
-  const handleShowFeed = async () => {
-    await fetchPosts();
-    console.log("feed updated");
-    console.log(fetchPosts);
-    handleOffCanvasClose(); 
-  };
-  
+  const { fetchPosts } = useFetchPosts();
 
-  // Modal 
+  // update posts feed
+  const UpdateFeed = () => {
+    fetchPosts();
+    handleOffCanvasClose();
+  };
+
+  // Modal
 
   const { handleShowModal } = useModal();
 
-//   OffCanvas menu
+  //   OffCanvas menu
   const toggleOffCanvas = () => setShowOffCanvas(!showOffCanvas);
   const handleOffCanvasClose = () => setShowOffCanvas(false);
 
@@ -66,44 +61,42 @@ function Navigation() {
             <Nav className="justify-content-end flex-grow-1 pe-3">
               {!currentUser ? (
                 <>
-                  
-                  <Nav.Link onClick={() => handleShowModal('login')}>
-                    
+                  <Nav.Link onClick={() => handleShowModal("login")}>
                     <FontAwesomeIcon icon={faUserCircle} className="me-1" />
                     Login
                   </Nav.Link>
-                  <Nav.Link onClick={() => handleShowModal('signup')}>
-                  <FontAwesomeIcon icon={faUserPlus} className="me-1"/>
-                  Sign Up
+                  <Nav.Link onClick={() => handleShowModal("signup")}>
+                    <FontAwesomeIcon icon={faUserPlus} className="me-1" />
+                    Sign Up
                   </Nav.Link>
                 </>
               ) : (
                 <>
-                  <Nav.Link onClick={() => handleShowModal('follow')}>
+                  <Nav.Link onClick={() => handleShowModal("follow")}>
                     <FontAwesomeIcon icon={faPlus} className="me-1" />
                     Follow
                   </Nav.Link>
-                  <Nav.Link onClick={handleShowFeed}>
+                  <Nav.Link onClick={UpdateFeed}>
                     <FontAwesomeIcon icon={faList} className="me-1" />
                     Feed
                   </Nav.Link>
+
                   <Nav.Link href="/liked">
                     <FontAwesomeIcon icon={faHeart} className="me-1" />
                     Liked Posts
                   </Nav.Link>
-                  <Nav.Link onClick={() => handleShowModal('addPost')}>
+                  <Nav.Link onClick={() => handleShowModal("addPost")}>
                     <FontAwesomeIcon icon={faPlusSquare} className="me-1" />
                     Add Post
-                  </Nav.Link>        
-                  <Nav.Link onClick={() => handleShowModal('profile')}>
-                    <FontAwesomeIcon icon={faUserCircle} className="me-1" />
-                    Profile
                   </Nav.Link>
+                  <Nav.Link onClick={() => handleShowModal("profile")}>           
+  <FontAwesomeIcon icon={faUserCircle} className="me-1" />
+  Profile
+</Nav.Link>
                   <Nav.Link onClick={logout}>
                     <FontAwesomeIcon icon={faSignOutAlt} className="me-1" />
                     Sign out
                   </Nav.Link>
-                  
                 </>
               )}
             </Nav>

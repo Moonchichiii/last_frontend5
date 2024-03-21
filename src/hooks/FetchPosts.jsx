@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
 import { axiosFormData } from '../api/axiosConfig';
 
-function useFetchPosts() {
+function useFetchPosts(searchTerm = '', initialPage = 1) {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [hasMore, setHasMore] = useState(false);
 
     //fetching posts from the backend
     const fetchPosts = async () => {
@@ -19,20 +20,33 @@ function useFetchPosts() {
             setLoading(false);
         }
     };
-    // updating the like count, 
-    const updateLikesCount = useCallback((postId, increment) => {
-        setPosts(currentPosts => 
-          currentPosts.map(post => 
-            post.id === postId ? { ...post, likes_count: post.likes_count + (increment ? 1 : -1) } : post
-          )
-        );
-    }, []);
 
+    // Search and infinite scroll function 
     useEffect(() => {
-        fetchPosts();
-    }, []);
+        const fetch = async () => {
+            setLoading(true);
+            setError(null);
+            try {
+                const response = await axiosFormData.get(`/posts/?search=${encodeURIComponent(searchTerm)}&page=${initialPage}`);
+                setPosts(prevPosts => initialPage === 1 ? response.data.results : [...prevPosts, ...response.data.results]);
+                setHasMore(response.data.results.length > 0);
+            } catch (err) {
+                if (err.response.status === 404) {
+                    setHasMore(false);
+                    setError('No more posts to load!'); 
+                } else {
+                    setError('Failed to fetch posts. Please try again.');
+                }
+            } finally {
+                setLoading(false);
+            }
+        };
 
-    return { posts, loading, error, fetchPosts, updateLikesCount };
+        fetch();
+    }, [searchTerm, initialPage]);
+
+    return { posts, loading, error, hasMore };
+
 }
 
 export default useFetchPosts;

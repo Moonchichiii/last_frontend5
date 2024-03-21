@@ -1,17 +1,22 @@
 import React from "react";
-import { useCurrentUser } from "../contexts/CurrentUserContext";
+import { Container,Button,Row,Col,Card } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrash, faHeart } from "@fortawesome/free-solid-svg-icons";
-import Card from "react-bootstrap/Card";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
-import Button from "react-bootstrap/Button";
+
+
+
+// displaying other icons inside the card 
+import { useCurrentUser } from "../contexts/CurrentUserContext";
+
 
 import usePostActions from "../hooks/UsePostsActions";
+
 
 function PostCard({ posts, updateLikesCount }) {
   const currentUser = useCurrentUser(); 
   const { deletePost, likePost, unlikePost } = usePostActions(updateLikesCount);
+
+  
 
   if (!posts.length) return <div>No posts found.</div>;
 
@@ -27,11 +32,19 @@ function PostCard({ posts, updateLikesCount }) {
     await unlikePost(postId);
   };
 
+  
+  
   return (
-    <Row xs={1} md={2} lg={3} className="g-4">
-      {posts.map((post) => (
-        <Col key={post.id}>
-          <Card>
+    <Container>
+      <Row xs={1} md={2} lg={3} className="g-4">
+        {posts.map((post) => (
+          <Col 
+            key={post.id} 
+            md={6} 
+            lg={4} 
+            style={posts.length === 1 ? { minWidth: '200px', margin: '0 auto', textAlign: 'center' } : {}}
+          >
+          <Card >
             <Card.Img
               variant="top"
               src={post.image}
@@ -63,21 +76,22 @@ function PostCard({ posts, updateLikesCount }) {
                 </>
               )}
               <Card.Text>Posted on: {post.created_at}</Card.Text>
-              {currentUser && post.creatorId === currentUser.userId && (
-                <div>
-                  <Button variant="outline-primary" size="sm" className="me-2">
-                    <FontAwesomeIcon icon={faPen} /> Edit
-                  </Button>
-                  <Button variant="outline-danger" size="sm" onClick={() => handleDelete(post.id)}>
-                    <FontAwesomeIcon icon={faTrash} /> Delete
-                  </Button>
-                </div>
-              )}
+              {currentUser?.isLoggedIn && post.creatorId === currentUser.userId &&  (                
+  <div>
+    <Button variant="outline-primary" size="sm" className="me-2" onClick={() => handleEdit(post.id)}>
+      <FontAwesomeIcon icon={faPen} /> Edit
+    </Button>
+    <Button variant="outline-danger" size="sm" onClick={() => handleDelete(post.id)}>
+      <FontAwesomeIcon icon={faTrash} /> Delete
+    </Button>
+  </div>
+)}
             </Card.Body>
           </Card>
         </Col>
       ))}
     </Row>
+    </Container>
   );
 }
 

@@ -12,7 +12,10 @@ const PostForm = React.lazy(() => import("../pages/posts/PostForm.jsx"));
 const PostEdit = React.lazy(() => import("../pages/posts/PostEdit")); 
 
 // Profile Forms 
+const ProfileView = React.lazy(() => import("../pages/profiles/ProfileView.jsx"));
 // const ProfileEditForm = React.lazy(() => import("./profiles/ProfileEdit"));
+
+
 
 
 
@@ -30,8 +33,12 @@ function GenericModal() {
           return <PostForm />;
            case 'editPost':
            return <PostEdit />;
-        // case 'editProfile':
-          // return <ProfileEditForm />;
+
+           case 'profile':
+  return <ProfileView />;
+
+        //  case 'editProfile':
+        //    return <ProfileEditView />;
       default:
         return <div>No content selected....</div>; 
     }
