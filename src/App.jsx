@@ -1,19 +1,15 @@
-import React, { useState,Suspense, lazy } from 'react';
+import React, { useState, Suspense, lazy } from "react";
 import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./pages/routing/ProtectedRoute";
 
 import { ModalProvider } from "./contexts/ModalContext";
 
-import Layout from './assets/styles/LayOut.jsx';
+import Layout from "./assets/styles/LayOut.jsx";
 import PostCard from "./components/Card.jsx";
 
-import SearchBar from './components/SearchBar.jsx'
-import InfiniteScroll from 'react-infinite-scroll-component';
-import useFetchPosts from './hooks/FetchPosts';
-
-
-
-
+import SearchBar from "./components/SearchBar.jsx";
+import InfiniteScroll from "react-infinite-scroll-component";
+import useFetchPosts from "./hooks/FetchPosts";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -21,7 +17,7 @@ import "./App.css";
 const Dashboard = lazy(() => import("./pages/dashboard/DashBoard.jsx"));
 
 function App() {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(1);
   const { posts, loading, error, hasMore } = useFetchPosts(searchTerm, page);
 
@@ -31,7 +27,6 @@ function App() {
   };
 
   return (
-
     <ModalProvider>
       <Suspense
         fallback={
@@ -62,7 +57,7 @@ function App() {
                       loader={<h4>Loading...</h4>}
                     >
                       <PostCard posts={posts} />
-                                          </InfiniteScroll>
+                    </InfiniteScroll>
                     {loading && <div>Loading posts...</div>}
                     {error && <div>Error: {error.message}</div>}
                   </Suspense>

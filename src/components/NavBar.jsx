@@ -89,10 +89,10 @@ function Navigation() {
                     <FontAwesomeIcon icon={faPlusSquare} className="me-1" />
                     Add Post
                   </Nav.Link>
-                  <Nav.Link onClick={() => handleShowModal("profile")}>           
-  <FontAwesomeIcon icon={faUserCircle} className="me-1" />
-  Profile
-</Nav.Link>
+                  <Nav.Link onClick={() => handleShowModal("profile")}>
+                    <FontAwesomeIcon icon={faUserCircle} className="me-1" />
+                    Profile
+                  </Nav.Link>
                   <Nav.Link onClick={logout}>
                     <FontAwesomeIcon icon={faSignOutAlt} className="me-1" />
                     Sign out

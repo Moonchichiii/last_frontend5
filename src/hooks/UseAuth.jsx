@@ -1,40 +1,41 @@
-import React, { useEffect } from "react";
 import { axiosJson } from "../api/axiosConfig";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
-// import { CurrentUserContext, useSetCurrentUser } from "../contexts/CurrentUserContext";
-
-import { useSetCurrentUser } from "../contexts/CurrentUserContext";
-
+import {
+  CurrentUserContext,
+  useSetCurrentUser
+} from "../contexts/CurrentUserContext";
 
 export function useAuth() {
-  const setCurrentUser = useSetCurrentUser();  
-  
+  const setCurrentUser = useSetCurrentUser();
+
   const navigate = useNavigate();
-
-
 
   const setCookies = (accessToken, refreshToken) => {
     const secure = window.location.protocol.includes("https");
     Cookies.set("jwt_access", accessToken, {
       path: "/",
       sameSite: "Lax",
-      secure: secure,
+      secure: secure
     });
     Cookies.set("jwt_refresh", refreshToken, {
       path: "/token/refresh/",
       sameSite: "Lax",
-      secure: secure,
+      secure: secure
     });
   };
 
   // Register a new user
   async function register(username, email, password) {
     try {
-      const response = await axiosJson.post("/users/register/", { username, email, password });
-      if (response.status === 201) {        
-        login(username, password); 
-        setCurrentUser({ isLoggedIn: true, userId: user_id });   
+      const response = await axiosJson.post("/users/register/", {
+        username,
+        email,
+        password
+      });
+      if (response.status === 201) {
+        login(username, password);
+        setCurrentUser({ isLoggedIn: true }); 
       }
     } catch (error) {
       console.error("Registration failed:", error.response || error.message);
@@ -44,11 +45,14 @@ export function useAuth() {
   // Login an existing user
   async function login(username, password) {
     try {
-      const response = await axiosJson.post("/users/login/", { username, password });
+      const response = await axiosJson.post("/users/login/", {
+        username,
+        password
+      });
       if (response.status === 200) {
-        const { access, refresh, user_id } = response.data;
+        const { access, refresh } = response.data; 
         setCookies(access, refresh);
-        setCurrentUser({ isLoggedIn: true, userId: user_id });      
+        setCurrentUser({ isLoggedIn: true }); 
         navigate("/dashboard");
       }
     } catch (error) {
@@ -60,13 +64,17 @@ export function useAuth() {
 
   const removeCookies = () => {
     const secure = window.location.protocol.includes("https");
-    Cookies.remove("jwt_access", { path: "/", sameSite: "Lax", secure: secure });
-    Cookies.remove("jwt_refresh", { path: "/token/refresh/", sameSite: "Lax", secure: secure });
+    Cookies.remove("jwt_access", {
+      path: "/",
+      sameSite: "Lax",
+      secure: secure
+    });
+    Cookies.remove("jwt_refresh", {
+      path: "/token/refresh/",
+      sameSite: "Lax",
+      secure: secure
+    });
   };
-
-  
-
-  
 
   async function logout() {
     try {
